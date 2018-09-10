@@ -6,11 +6,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.criteria.CriteriaBuilder.In;
 
+//import org.hibernate.annotations.NamedQueries;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name = "getAllTasks",
+            query = "SELECT t FROM Task AS t ORDER BY t.id DESC"
+            )
+
+})
+
 @Table(name = "tasks")
 public class Task {
 
