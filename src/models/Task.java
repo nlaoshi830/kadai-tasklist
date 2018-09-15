@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.criteria.CriteriaBuilder.In;
+//import javax.persistence.criteria.CriteriaBuilder.In;
 
 //import org.hibernate.annotations.NamedQueries;
 
@@ -18,8 +18,11 @@ import javax.persistence.criteria.CriteriaBuilder.In;
     @NamedQuery(
             name = "getAllTasks",
             query = "SELECT t FROM Task AS t ORDER BY t.id DESC"
+            ),
+    @NamedQuery(
+            name = "getTasksCount",
+            query = "SELECT COUNT(t) FROM Task AS t"
             )
-
 })
 
 @Table(name = "tasks")

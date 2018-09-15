@@ -3,7 +3,7 @@ package controllers;
 import java.io.IOException;
 
 import javax.persistence.EntityManager;
-import javax.print.attribute.standard.RequestingUserName;
+//import javax.print.attribute.standard.RequestingUserName;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import models.Task;
 import utils.DBUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
+//import javax.persistence.EntityManager;
 
 /**
  * Servlet implementation class IndexServlet
@@ -35,13 +35,34 @@ public class IndexServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//	    Create Entity Manager
 	    EntityManager em = DBUtil.createEntityManager();
 
-	    List<Task> tasks = em.createNamedQuery("getAllTasks", Task.class).getResultList();
+	    int page = 1;
+
+	    try {
+	        page = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+
+//	    List<Task> tasks = em.createNamedQuery("getAllTasks", Task.class).getResultList();
+	    List<Task> tasks = em.createNamedQuery("getAllTasks", Task.class)
+	            .setFirstResult(15 * (page - 1))
+	            .setMaxResults(15)
+	            .getResultList();
+
+	    long tasks_count = (long)em.createNamedQuery("getTasksCount", Long.class)
+	            .getSingleResult();
 
 	    em.close();
 
 	    request.setAttribute("tasks", tasks);
+	    request.setAttribute("tasks_count", tasks_count);
+	    request.setAttribute("page", page);
+
+
 	    if (request.getSession().getAttribute("flush") != null){
 	        request.setAttribute("flush", request.getSession().getAttribute("flush"));
 	        request.getSession().removeAttribute("flush");
